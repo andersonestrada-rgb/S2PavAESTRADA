@@ -22,7 +22,6 @@ public class Enemy : MonoBehaviour
     {
     }
 
-    // Apply damage to this enemy. Other classes must use this method instead of modifying health directly.
     public void TakeDamage(int damage)
     {
         health.TakeDamage(damage);
@@ -36,13 +35,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Returns true if the enemy has no life left.
     public bool IsDead()
     {
         return health.GetLife() <= 0;
     }
 
-    // Optional: expose current life as read-only.
     public int GetLife()
     {
         return health.GetLife();

@@ -42,7 +42,6 @@ public class Player : MonoBehaviour
         health.TakeDamage(damage);
     }
 
-    // Ahora coherente con Weapon.Shoot(): no necesita objetivo directo, Weapon se encarga de instanciar la bala.
     public void Shoot()
     {
         if (weapon == null)
