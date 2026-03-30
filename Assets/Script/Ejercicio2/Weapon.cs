@@ -11,56 +11,47 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] private int damage;
+    [SerializeField] private int damage = 5;
     [SerializeField] private int ammo = 10;
+
+    [Header("Bullet")]
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private float bulletSpeed = 8f;
 
     void Start()
     {
-
     }
 
-    public void Shoot2(Player target)
+    // Instancia una bala, le asigna daño/velocidad y la dispara desde firePoint.
+    public void Shoot()
     {
+        if (bulletPrefab == null)
+        {
+            Debug.LogWarning("No se ha asignado bulletPrefab en Weapon.");
+            return;
+        }
 
-        if (target == null || ammo <= 0)
+        if (firePoint == null)
+        {
+            Debug.LogWarning("No se ha asignado firePoint en Weapon.");
+            return;
+        }
+
+        if (ammo <= 0)
         {
             Debug.Log("No tiene munición");
             return;
         }
 
-        if (ammo >= 1)
+        var bulletObj = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        var bulletComp = bulletObj.GetComponent<Bullet>();
+        if (bulletComp != null)
         {
-            target.TakeDamage(damage);
-            ammo--;
-            Debug.Log("Shoot");
+            bulletComp.Init(damage, bulletSpeed);
         }
-        else
-        {
-            Debug.Log("No tiene munición");
-        }
-    }
 
-
-
-
-    public void Shoot(Player target)
-    {
-       
-        if (target == null || ammo <= 0)
-        {
-            Debug.Log("No tiene munición");
-            return;
-        }
-      
-        if (ammo >= 1)
-        {
-            target.TakeDamage(damage);
-            ammo--;
-            Debug.Log("Shoot");
-        }
-        else
-        {
-            Debug.Log("No tiene munición");
-        }       
+        ammo--;
+        Debug.Log("Munición restante: " + ammo);
     }
 }

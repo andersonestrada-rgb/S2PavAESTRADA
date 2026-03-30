@@ -13,22 +13,27 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Health health = new();
- 
+
     void Start()
     {
-        
     }
-
 
     void Update()
     {
-        
     }
 
     // Apply damage to this enemy. Other classes must use this method instead of modifying health directly.
     public void TakeDamage(int damage)
     {
         health.TakeDamage(damage);
+
+        int currentLife = health.GetLife();
+        Debug.Log($"{name} recibió {damage} de daño. Vida restante: {currentLife}");
+
+        if (currentLife <= 0)
+        {
+            Die();
+        }
     }
 
     // Returns true if the enemy has no life left.
@@ -43,4 +48,9 @@ public class Enemy : MonoBehaviour
         return health.GetLife();
     }
 
+    private void Die()
+    {
+        Debug.Log($"{name} ha muerto.");
+        Destroy(gameObject);
+    }
 }

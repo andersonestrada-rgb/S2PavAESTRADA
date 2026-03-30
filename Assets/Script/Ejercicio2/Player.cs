@@ -7,53 +7,51 @@ acceder directamente a la vida del enemigo.
 */
 
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Player Target;
-    [SerializeField] string PlayerName;
+    [SerializeField] private string PlayerName;
     [SerializeField] private Health health = new();
     [SerializeField] private Weapon weapon;
-
+    [SerializeField] private float healAmount = 12f;
 
     void Start()
     {
-
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Shoot(Target);//modificar
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log(PlayerName + "|");
-            health.GetLife();
+            Shoot();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            health.Heal(12);
+            Debug.Log(PlayerName + " | Vida: " + health.GetLife());
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            health.Heal((int)healAmount);
         }
     }
+
     public void TakeDamage(int damage)
     {
         health.TakeDamage(damage);
     }
-    public void Shoot(Player Target)
+
+    // Ahora coherente con Weapon.Shoot(): no necesita objetivo directo, Weapon se encarga de instanciar la bala.
+    public void Shoot()
     {
+        if (weapon == null)
+        {
+            Debug.LogWarning("Player sin Weapon asignada.");
+            return;
+        }
 
-        Debug.Log(PlayerName + "|");
-        weapon.Shoot(Target);
+        Debug.Log(PlayerName + " dispara!");
+        weapon.Shoot();
     }
-
-
-
-
-
-
-    // public void TakeDamage(int damage) =>  health.TakeDamage(damage);
 }

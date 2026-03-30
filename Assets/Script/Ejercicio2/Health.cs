@@ -10,34 +10,51 @@ métodos.
 */
 
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
-
 
 [Serializable]
 public class Health
 {
     [SerializeField] private int value = 10;
+    [SerializeField] private int maxValue = 100;
 
-    public void TakeDamage(int damage) //imcompleto
+    private void OnValidate()
     {
+        if (maxValue < 1) maxValue = 1;
+        if (value < 0) value = 0;
+        if (value > maxValue) value = maxValue;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (damage <= 0)
+        {
+            Debug.LogWarning("TakeDamage: el daño debe ser un valor positivo.");
+            return;
+        }
+
         value -= damage;
-        if (value < 0)
-            value = 0;
+        if (value < 0) value = 0;
 
         Debug.Log("Daño: " + damage + " Vida restante: " + value);
     }
 
-    public void Heal(int _heal)
+    public void Heal(int heal)
     {
-        value += _heal;
-        Debug.Log($"Te has curado {_heal}. Ahora tienes {value} puntos de vida");
+        if (heal <= 0)
+        {
+            Debug.LogWarning("Heal: la curación debe ser un valor positivo.");
+            return;
+        }
+
+        value += heal;
+        if (value > maxValue) value = maxValue;
+
+        Debug.Log($"Te has curado {heal}. Ahora tienes {value} puntos de vida");
     }
 
     public int GetLife()
     {
-        Debug.Log("Current Life:" + value);
         return value;
     }
-
 }
